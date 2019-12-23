@@ -10,15 +10,16 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
       request.responseType = responseType
     }
 
-    request.onreadystatechange = function handleLoad() {
-      if (request.readyState !== 4) {
-        return
-      }
+    request.open(method.toLowerCase(), url, true)
 
-      const requestHeaders = request.getAllResponseHeaders()
+    request.onreadystatechange = () => {
+      // if (request.readyState !== 4) {
+      //   return
+      // }
+      // const responseHeaders = request.getAllResponseHeaders()
+      // const responseData = responseType !== 'text' request.response : request.responseText
     }
 
-    request.open(method.toLowerCase(), url, true)
     Object.keys(headers).forEach(name => {
       if (data === null && name.toLowerCase() === 'content-type') {
         delete headers[name]
