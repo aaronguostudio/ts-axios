@@ -74,6 +74,8 @@ axios({
     a: 1,
     b: 2
   }
+}).then(res => {
+  console.log('> base res 1', res)
 })
 
 axios({
@@ -83,10 +85,13 @@ axios({
     'content-type': 'application/json',
     'Accept': 'application/json, text/plain, */*'
   },
+  responseType: 'json',
   data: {
     a: 1,
     b: 2
   }
+}).then(res => {
+  console.log('> base res 2', res)
 })
 
 const paramsString = 'q=URLUtils.searchParams&topic=api'

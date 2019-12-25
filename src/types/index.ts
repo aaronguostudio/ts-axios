@@ -20,7 +20,7 @@ export interface AxiosRequestConfig {
   data?: any
   params?: any
   headers?: any
-  responseType?: XMLHttpRequestResponseType
+  responseType?: XMLHttpRequestResponseType // ts build-in type
 }
 
 export interface AxiosResponse {
