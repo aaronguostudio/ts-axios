@@ -16,12 +16,16 @@ export type Method =
 
 export interface AxiosRequestConfig {
   url?: string
-  method?: string
+  method?: Method
   data?: any
   params?: any
   headers?: any
   responseType?: XMLHttpRequestResponseType // ts build-in type
   timeout?: number
+  transformRequest?: AxiosTransformer | AxiosTransformer[]
+  transformResponse?: AxiosTransformer | AxiosTransformer[]
+
+  [propName: string]: any // 字符串索引签名
 }
 
 export interface AxiosResponse<T = any> {
@@ -44,6 +48,7 @@ export interface AxiosError extends Error {
 export interface AxiosPromise<T = any> extends Promise<AxiosResponse<T>> {}
 
 export interface Axios {
+  defaults: AxiosRequestConfig
   interceptors: {
     request: AxiosInterceptorManager<AxiosRequestConfig>
     response: AxiosInterceptorManager<AxiosResponse>
@@ -66,16 +71,24 @@ export interface AxiosInstance extends Axios {
   <T = any>(url: string, config: AxiosRequestConfig): AxiosPromise<T>
 }
 
+export interface AxiosStatic extends AxiosInstance {
+  create(config?: AxiosRequestConfig): AxiosInstance
+}
+
 export interface AxiosInterceptorManager<T> {
   // return a number as the id of the interceptor
-  use(resolved: resolvedFn<T>, rejected?: rejectedFn): number
+  use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number
   eject(id: number): void
 }
 
-export interface resolvedFn<T> {
+export interface ResolvedFn<T> {
   (val: T): T | Promise<T>
 }
 
-export interface rejectedFn {
+export interface RejectedFn {
   (error: any): any
+}
+
+export interface AxiosTransformer {
+  (data: any, headers?: any): any
 }

@@ -1,8 +1,8 @@
-import { resolvedFn, rejectedFn, AxiosInterceptorManager } from '../types'
+import { ResolvedFn, RejectedFn, AxiosInterceptorManager } from '../types'
 
 interface Interceptor<T> {
-  resolved: resolvedFn<T>
-  rejected?: rejectedFn
+  resolved: ResolvedFn<T>
+  rejected?: RejectedFn
 }
 
 export default class IntercepterManager<T> implements AxiosInterceptorManager<T> {
@@ -12,7 +12,7 @@ export default class IntercepterManager<T> implements AxiosInterceptorManager<T>
     this.interceptors = []
   }
 
-  use(resolved: resolvedFn<T>, rejected?: rejectedFn): number {
+  use(resolved: ResolvedFn<T>, rejected?: RejectedFn): number {
     this.interceptors.push({
       resolved,
       rejected

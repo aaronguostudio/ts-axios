@@ -3,26 +3,29 @@ import {
   AxiosPromise,
   Method,
   AxiosResponse,
-  resolvedFn,
-  rejectedFn
+  ResolvedFn,
+  RejectedFn
 } from '../types'
 import dispatchRequest from './dispatchRequest'
 import IntercepterManager from './interceptorManager'
+import mergeConfig from './mergeConfig'
 
-interface interceptors {
+interface Interceptors {
   request: IntercepterManager<AxiosRequestConfig>
   response: IntercepterManager<AxiosResponse>
 }
 
 interface PromiseChain<T> {
-  resolved: resolvedFn<T> | ((config: AxiosRequestConfig) => AxiosPromise)
-  rejected?: rejectedFn
+  resolved: ResolvedFn<T> | ((config: AxiosRequestConfig) => AxiosPromise)
+  rejected?: RejectedFn
 }
 
 export default class Axios {
-  interceptors: interceptors
+  defaults: AxiosRequestConfig
+  interceptors: Interceptors
 
-  constructor() {
+  constructor(initConfig: AxiosRequestConfig) {
+    this.defaults = initConfig
     this.interceptors = {
       request: new IntercepterManager<AxiosRequestConfig>(),
       response: new IntercepterManager<AxiosResponse>()
@@ -41,6 +44,8 @@ export default class Axios {
     } else {
       config = url
     }
+
+    config = mergeConfig(this.defaults, config)
 
     // 初始化调用链，这里初始化的就是实际的请求
     const chain: PromiseChain<any>[] = [
